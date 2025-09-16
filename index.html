@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introduction to Search Algorithms</title>
+    <title>Introduction to Pathfinding Search Algorithms</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,125 +49,56 @@
 </head>
 <body>
     <header>
-        <h1>Introduction to Search Algorithms</h1>
-        <p>Explore the fundamentals of search algorithms used in computer science</p>
+        <h1>Introduction to Pathfinding Search Algorithms</h1>
+        <p>Explore algorithms used to find optimal paths in graphs or grids</p>
     </header>
     <div class="container">
         <section class="algorithm">
             <h2>Overview</h2>
-            <p>Search algorithms are techniques for finding a specific item in a collection of data. They are fundamental to computer science and are used in databases, search engines, and more. This page introduces common search algorithms, their mechanisms, and their use cases.</p>
+            <p>Pathfinding algorithms are used to find the shortest or optimal path between two points in a graph or grid, often used in navigation, robotics, and video games. This page introduces common pathfinding algorithms, their mechanisms, and their use cases.</p>
         </section>
 
         <section class="algorithm">
-            <h3>Linear Search</h3>
-            <p><strong>Description:</strong> Linear search, also known as sequential search, checks each element in a list until the target is found or the list ends.</p>
-            <p><strong>Time Complexity:</strong> O(n) - where n is the number of elements.</p>
-            <p><strong>Use Case:</strong> Suitable for small or unsorted datasets.</p>
+            <h3>Breadth-First Search (BFS)</h3>
+            <p><strong>Description:</strong> BFS explores all neighbors of a node level by level, using a queue. It guarantees the shortest path in unweighted graphs.</p>
+            <p><strong>Time Complexity:</strong> O(V + E) - where V is vertices and E is edges.</p>
+            <p><strong>Use Case:</strong> Finding the shortest path in mazes or unweighted graphs.</p>
             <p><strong>Pseudocode:</strong></p>
             <pre><code>
-for i from 0 to n-1:
-    if array[i] == target:
-        return i
-return -1
-            </code></pre>
-        </section>
-
-        <section class="algorithm">
-            <h3>Binary Search</h3>
-            <p><strong>Description:</strong> Binary search works on sorted arrays by repeatedly dividing the search interval in half. It compares the target with the middle element and eliminates half of the remaining elements.</p>
-            <p><strong>Time Complexity:</strong> O(log n) - highly efficient for large datasets.</p>
-            <p><strong>Use Case:</strong> Ideal for sorted data, such as in database indexing.</p>
-            <p><strong>Pseudocode:</strong></p>
-            <pre><code>
-left = 0
-right = n-1
-while left <= right:
-    mid = (left + right) // 2
-    if array[mid] == target:
-        return mid
-    else if array[mid] < target:
-        left = mid + 1
-    else:
-        right = mid - 1
-return -1
-            </code></pre>
-        </section>
-
-        <section class="algorithm">
-            <h3>Jump Search</h3>
-            <p><strong>Description:</strong> Jump search works on sorted arrays by jumping ahead by fixed steps and then performing a linear search in the identified block.</p>
-            <p><strong>Time Complexity:</strong> O(√n) - a balance between linear and binary search.</p>
-            <p><strong>Use Case:</strong> Useful for sorted data with uniform distribution.</p>
-            <p><strong>Pseudocode:</strong></p>
-            <pre><code>
-step = sqrt(n)
-prev = 0
-while array[min(step, n)-1] < target:
-    prev = step
-    step += sqrt(n)
-    if prev >= n:
-        return -1
-while array[prev] < target:
-    prev += 1
-    if prev == min(step, n):
-        return -1
-if array[prev] == target:
-    return prev
-return -1
-            </code></pre>
-        </section>
-
-        <section class="algorithm">
-            <h3>Interpolation Search</h3>
-            <p><strong>Description:</strong> Interpolation search is an improvement over binary search for uniformly distributed sorted data. It estimates the position of the target based on the values at the bounds.</p>
-            <p><strong>Time Complexity:</strong> O(log log n) for uniform data, but can degrade to O(n).</p>
-            <p><strong>Use Case:</strong> Effective for uniformly distributed datasets, like numerical tables.</p>
-            <p><strong>Pseudocode:</strong></p>
-            <pre><code>
-left = 0
-right = n-1
-while left <= right and target >= array[left] and target <= array[right]:
-    pos = left + ((target - array[left]) * (right - left)) // (array[right] - array[left])
-    if array[pos] == target:
-        return pos
-    else if array[pos] < target:
-        left = pos + 1
-    else:
-        right = pos - 1
-return -1
-            </code></pre>
-        </section>
-
-        <section class="algorithm">
-            <h3>Exponential Search</h3>
-            <p><strong>Description:</strong> Exponential search finds a range where the target may exist by exponentially increasing the index, then applies binary search within that range.</p>
-            <p><strong>Time Complexity:</strong> O(log n) - efficient for large sorted arrays.</p>
-            <p><strong>Use Case:</strong> Suitable for unbounded or very large sorted lists.</p>
-            <p><strong>Pseudocode:</strong></p>
-            <pre><code>
-if array[0] == target:
-    return 0
-i = 1
-while i < n and array[i] <= target:
-    i = i * 2
-return binary_search(array, target, i/2, min(i, n-1))
+function BFS(graph, start, goal):
+    queue = new Queue()
+    visited = new Set()
+    parent = new Map()
+    queue.push(start)
+    visited.add(start)
+    while queue is not empty:
+        node = queue.pop()
+        if node == goal:
+            return reconstruct_path(parent, goal)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                parent[neighbor] = node
+                queue.push(neighbor)
+    return null
             </code></pre>
         </section>
 
         <section class="algorithm">
             <h3>Depth-First Search (DFS)</h3>
-            <p><strong>Description:</strong> DFS explores as far as possible along each branch of a graph or tree before backtracking. It can be used for searching connected components or paths.</p>
-            <p><strong>Time Complexity:</strong> O(V + E) - where V is vertices and E is edges.</p>
-            <p><strong>Use Case:</strong> Used in graph problems like maze solving or detecting cycles.</p>
+            <p><strong>Description:</strong> DFS explores as far as possible along each branch before backtracking, using a stack (or recursion). It may not find the shortest path.</p>
+            <p><strong>Time Complexity:</strong> O(V + E).</p>
+            <p><strong>Use Case:</strong> Pathfinding in mazes or detecting cycles, but not ideal for shortest paths.</p>
             <p><strong>Pseudocode:</strong></p>
             <pre><code>
-function DFS(graph, node, target, visited):
-    if node == target:
-        return node
+function DFS(graph, node, goal, visited, parent):
+    if node == goal:
+        return reconstruct_path(parent, goal)
     visited.add(node)
     for neighbor in graph[node]:
         if neighbor not in visited:
-            result = DFS(graph, neighbor, target, visited)
+            parent[neighbor] = node
+            result = DFS(graph, neighbor, goal, visited, parent)
             if result:
                 return result
     return null
@@ -175,25 +106,84 @@ function DFS(graph, node, target, visited):
         </section>
 
         <section class="algorithm">
-            <h3>Breadth-First Search (BFS)</h3>
-            <p><strong>Description:</strong> BFS explores all neighbors of a node before moving to the next level. It uses a queue to process nodes level by level.</p>
-            <p><strong>Time Complexity:</strong> O(V + E) - similar to DFS but ensures shortest path in unweighted graphs.</p>
-            <p><strong>Use Case:</strong> Ideal for finding the shortest path in unweighted graphs.</p>
+            <h3>Uniform Cost Search (UCS)</h3>
+            <p><strong>Description:</strong> UCS explores nodes in order of increasing path cost from the start node, using a priority queue. It guarantees the shortest path in weighted graphs with non-negative edge weights.</p>
+            <p><strong>Time Complexity:</strong> O((V + E) log V) with a priority queue.</p>
+            <p><strong>Use Case:</strong> Finding the shortest path in weighted graphs, such as road networks or resource-constrained routing.</p>
             <p><strong>Pseudocode:</strong></p>
             <pre><code>
-function BFS(graph, start, target):
-    queue = new Queue()
+function UniformCostSearch(graph, start, goal):
+    priority_queue = new PriorityQueue()
     visited = new Set()
-    queue.push(start)
-    visited.add(start)
-    while queue is not empty:
-        node = queue.pop()
-        if node == target:
-            return node
-        for neighbor in graph[node]:
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.push(neighbor)
+    parent = {}
+    cost = {start: 0}
+    priority_queue.push(start, 0)
+    while priority_queue is not empty:
+        node = priority_queue.pop()
+        if node == goal:
+            return reconstruct_path(parent, goal)
+        if node not in visited:
+            visited.add(node)
+            for neighbor, weight in graph[node]:
+                new_cost = cost[node] + weight
+                if neighbor not in cost or new_cost < cost[neighbor]:
+                    cost[neighbor] = new_cost
+                    parent[neighbor] = node
+                    priority_queue.push(neighbor, new_cost)
+    return null
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Dijkstra’s Algorithm</h3>
+            <p><strong>Description:</strong> Dijkstra’s algorithm finds the shortest path in a weighted graph using a priority queue, ensuring non-negative edge weights.</p>
+            <p><strong>Time Complexity:</strong> O((V + E) log V) with a priority queue.</p>
+            <p><strong>Use Case:</strong> Navigation systems with weighted paths (e.g., road networks).</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+function Dijkstra(graph, start, goal):
+    distances = {node: infinity for node in graph}
+    distances[start] = 0
+    parent = {}
+    pq = new PriorityQueue()
+    pq.push(start, 0)
+    while pq is not empty:
+        node = pq.pop()
+        if node == goal:
+            return reconstruct_path(parent, goal)
+        for neighbor, weight in graph[node]:
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                parent[neighbor] = node
+                pq.push(neighbor, distances[neighbor])
+    return null
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>A* Search</h3>
+            <p><strong>Description:</strong> A* is a heuristic-based search that extends Dijkstra’s by using a heuristic to estimate the cost to the goal, prioritizing promising paths.</p>
+            <p><strong>Time Complexity:</strong> O(E log V) in practice, depends on heuristic quality.</p>
+            <p><strong>Use Case:</strong> Pathfinding in games and robotics with grids or maps.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+function AStar(graph, start, goal, heuristic):
+    open_set = new PriorityQueue()
+    open_set.push(start, heuristic(start, goal))
+    came_from = {}
+    g_score = {start: 0}
+    f_score = {start: heuristic(start, goal)}
+    while open_set is not empty:
+        current = open_set.pop()
+        if current == goal:
+            return reconstruct_path(came_from, goal)
+        for neighbor in graph[current]:
+            tentative_g_score = g_score[current] + distance(current, neighbor)
+            if tentative_g_score < g_score.get(neighbor, infinity):
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, goal)
+                open_set.push(neighbor, f_score[neighbor])
     return null
             </code></pre>
         </section>

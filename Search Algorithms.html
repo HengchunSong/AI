@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Search Algorithms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+        .algorithm {
+            margin-bottom: 20px;
+        }
+        .algorithm h3 {
+            color: #0066cc;
+        }
+        .algorithm p {
+            margin: 10px 0;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Introduction to Search Algorithms</h1>
+        <p>Explore the fundamentals of search algorithms used in computer science</p>
+    </header>
+    <div class="container">
+        <section class="algorithm">
+            <h2>Overview</h2>
+            <p>Search algorithms are techniques for finding a specific item in a collection of data. They are fundamental to computer science and are used in databases, search engines, and more. This page introduces common search algorithms, their mechanisms, and their use cases.</p>
+        </section>
+
+        <section class="algorithm">
+            <h3>Linear Search</h3>
+            <p><strong>Description:</strong> Linear search, also known as sequential search, checks each element in a list until the target is found or the list ends.</p>
+            <p><strong>Time Complexity:</strong> O(n) - where n is the number of elements.</p>
+            <p><strong>Use Case:</strong> Suitable for small or unsorted datasets.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+for i from 0 to n-1:
+    if array[i] == target:
+        return i
+return -1
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Binary Search</h3>
+            <p><strong>Description:</strong> Binary search works on sorted arrays by repeatedly dividing the search interval in half. It compares the target with the middle element and eliminates half of the remaining elements.</p>
+            <p><strong>Time Complexity:</strong> O(log n) - highly efficient for large datasets.</p>
+            <p><strong>Use Case:</strong> Ideal for sorted data, such as in database indexing.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+left = 0
+right = n-1
+while left <= right:
+    mid = (left + right) // 2
+    if array[mid] == target:
+        return mid
+    else if array[mid] < target:
+        left = mid + 1
+    else:
+        right = mid - 1
+return -1
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Jump Search</h3>
+            <p><strong>Description:</strong> Jump search works on sorted arrays by jumping ahead by fixed steps and then performing a linear search in the identified block.</p>
+            <p><strong>Time Complexity:</strong> O(√n) - a balance between linear and binary search.</p>
+            <p><strong>Use Case:</strong> Useful for sorted data with uniform distribution.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+step = sqrt(n)
+prev = 0
+while array[min(step, n)-1] < target:
+    prev = step
+    step += sqrt(n)
+    if prev >= n:
+        return -1
+while array[prev] < target:
+    prev += 1
+    if prev == min(step, n):
+        return -1
+if array[prev] == target:
+    return prev
+return -1
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Interpolation Search</h3>
+            <p><strong>Description:</strong> Interpolation search is an improvement over binary search for uniformly distributed sorted data. It estimates the position of the target based on the values at the bounds.</p>
+            <p><strong>Time Complexity:</strong> O(log log n) for uniform data, but can degrade to O(n).</p>
+            <p><strong>Use Case:</strong> Effective for uniformly distributed datasets, like numerical tables.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+left = 0
+right = n-1
+while left <= right and target >= array[left] and target <= array[right]:
+    pos = left + ((target - array[left]) * (right - left)) // (array[right] - array[left])
+    if array[pos] == target:
+        return pos
+    else if array[pos] < target:
+        left = pos + 1
+    else:
+        right = pos - 1
+return -1
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Exponential Search</h3>
+            <p><strong>Description:</strong> Exponential search finds a range where the target may exist by exponentially increasing the index, then applies binary search within that range.</p>
+            <p><strong>Time Complexity:</strong> O(log n) - efficient for large sorted arrays.</p>
+            <p><strong>Use Case:</strong> Suitable for unbounded or very large sorted lists.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+if array[0] == target:
+    return 0
+i = 1
+while i < n and array[i] <= target:
+    i = i * 2
+return binary_search(array, target, i/2, min(i, n-1))
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Depth-First Search (DFS)</h3>
+            <p><strong>Description:</strong> DFS explores as far as possible along each branch of a graph or tree before backtracking. It can be used for searching connected components or paths.</p>
+            <p><strong>Time Complexity:</strong> O(V + E) - where V is vertices and E is edges.</p>
+            <p><strong>Use Case:</strong> Used in graph problems like maze solving or detecting cycles.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+function DFS(graph, node, target, visited):
+    if node == target:
+        return node
+    visited.add(node)
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            result = DFS(graph, neighbor, target, visited)
+            if result:
+                return result
+    return null
+            </code></pre>
+        </section>
+
+        <section class="algorithm">
+            <h3>Breadth-First Search (BFS)</h3>
+            <p><strong>Description:</strong> BFS explores all neighbors of a node before moving to the next level. It uses a queue to process nodes level by level.</p>
+            <p><strong>Time Complexity:</strong> O(V + E) - similar to DFS but ensures shortest path in unweighted graphs.</p>
+            <p><strong>Use Case:</strong> Ideal for finding the shortest path in unweighted graphs.</p>
+            <p><strong>Pseudocode:</strong></p>
+            <pre><code>
+function BFS(graph, start, target):
+    queue = new Queue()
+    visited = new Set()
+    queue.push(start)
+    visited.add(start)
+    while queue is not empty:
+        node = queue.pop()
+        if node == target:
+            return node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.push(neighbor)
+    return null
+            </code></pre>
+        </section>
+    </div>
+</body>
+</html>
